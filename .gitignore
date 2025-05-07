@@ -4,3 +4,5 @@ sintlucas/.DS_Store
 .DS_Store
 kotcha/.vite/deps/package.json
 kotcha/.vite/deps/_metadata.json
+kotcha/package.json
+kotcha/package-lock.json
