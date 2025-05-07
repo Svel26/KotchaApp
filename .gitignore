@@ -2,3 +2,5 @@
 node_modules/
 sintlucas/.DS_Store
 .DS_Store
+kotcha/.vite/deps/package.json
+kotcha/.vite/deps/_metadata.json
