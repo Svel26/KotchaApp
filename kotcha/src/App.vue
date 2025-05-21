@@ -1,9 +1,11 @@
 <script setup>
-import TestThreeJS from './components/Mall.vue';
+import Main from './components/Main.vue';
+import Debug from './components/debug.vue';
 </script>
 
 <template>
-  <TestThreeJS />
+  <Main />
+  <Debug />
 </template>
 
 <style></style>
