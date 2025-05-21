@@ -14,9 +14,7 @@ Possible questions to get you going:
 
 In this document you will write down some conclusions.
 
-## First Retrospective [Date here]
-*
-
-
-
-...etc...
+## First Retrospective [14/05/2025]
+* Everybody thought it went pretty well
+* a mroe concrete plan might be benifitial for next sprint
+* we also need to remind ourselfs to do standups
