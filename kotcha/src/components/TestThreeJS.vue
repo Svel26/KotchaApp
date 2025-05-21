@@ -7,7 +7,7 @@ const cameraRotation = ref(0);
 const targetRotation = ref(0); // Target rotation for smooth animation
 
 const rotateCamera = (direction) => {
-  const angle = direction === 'left' ? -Math.PI / 4 : Math.PI / 4; // 45 degrees
+  const angle = direction === 'left' ? -Math.PI / 2 : Math.PI / 2; // 90 degrees
   targetRotation.value += angle; // Update target rotation
 };
 
@@ -87,7 +87,6 @@ onMounted(() => {
 canvas {
   display: block;
 }
-
 
 button {
   padding: 10px 18px;

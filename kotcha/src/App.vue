@@ -1,5 +1,5 @@
 <script setup>
-import TestThreeJS from './components/TestThreeJS.vue';
+import TestThreeJS from './components/Mall.vue';
 </script>
 
 <template>
