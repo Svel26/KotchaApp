@@ -7,11 +7,7 @@
         "modelPath": "/assets/models/baguette.glb",
         "riddle": "Ik ben lang en knapperig, een Frans genot, perfect met kaas, 's ochtends, 's middags of 's avonds.",
         "productInfo": "Ons versgebakken stokbrood is een favoriet van de klant. Geniet ervan binnen 2 dagen voor de beste smaak.",
-<<<<<<< Updated upstream
         "foodWasteTip": "Oud stokbrood kan worden omgetoverd tot heerlijke croutons of paneermeel. Laat het niet verspillen!",
-=======
-        "foodWasteTip": "Oud stokbrood kan worden omgetoverd tot heerlijke croutons of paneermeel. Laat het niet  verspillen!",
->>>>>>> Stashed changes
         "nfcTagId": "SHB1",
         "isCollected": false
       },
@@ -29,3 +25,4 @@
     ],
     "collectedCharacters": ["tomato_02"]
   }
+  
