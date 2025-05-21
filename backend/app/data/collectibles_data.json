@@ -1,0 +1,52 @@
+[
+    {
+        "character_id": 1,
+        "name": "Bram Broccoli",
+        "store_section": "Produce",
+        "_3d_model_path": "models/characters/bram_broccoli.glb",
+        "riddle_hint": "I am green and look like a little tree. Find me where the fresh veggies decree!",
+        "product_information": "Broccoli is a superfood packed with vitamins C and K, fiber, and antioxidants.",
+        "food_waste_tip": "Don't discard the stalk! Slice it thinly for stir-fries, or shred it for coleslaw. Broccoli leaves are edible too!",
+        "nfc_tag_id": "AH_COLLECT_NFC_001"
+    },
+    {
+        "character_id": 2,
+        "name": "Karel Kip",
+        "store_section": "Meat & Poultry",
+        "_3d_model_path": "models/characters/karel_kip.glb",
+        "riddle_hint": "I say 'tok tok tok' and give you an egg, look for me where it's chilly, I beg!",
+        "product_information": "Chicken is a great source of lean protein, essential for muscle growth and repair.",
+        "food_waste_tip": "Use leftover cooked chicken in salads, sandwiches, or soups. Chicken bones can be used to make a nutritious stock.",
+        "nfc_tag_id": "AH_COLLECT_NFC_002"
+    },
+    {
+        "character_id": 3,
+        "name": "Bella Banaan",
+        "store_section": "Produce",
+        "_3d_model_path": "models/characters/bella_banaan.glb",
+        "riddle_hint": "I'm a curved yellow fruit, a monkey's delight. Find me for a potassium bite!",
+        "product_information": "Bananas are a fantastic source of potassium, vitamin B6, and vitamin C.",
+        "food_waste_tip": "Overripe bananas are perfect for smoothies, banana bread, or pancakes. You can also freeze them for later use.",
+        "nfc_tag_id": "AH_COLLECT_NFC_003"
+    },
+    {
+        "character_id": 4,
+        "name": "Melvin Muffin",
+        "store_section": "Bakery",
+        "_3d_model_path": "models/characters/melvin_muffin.glb",
+        "riddle_hint": "Sweet or savory, I come in a paper cup. Fresh from the oven, I'm good to sup!",
+        "product_information": "Muffins can be a tasty treat or a quick breakfast. Look for whole-grain options for more fiber.",
+        "food_waste_tip": "Stale muffins can be revived by lightly sprinkling with water and warming in the oven, or turn them into bread pudding.",
+        "nfc_tag_id": "AH_COLLECT_NFC_004"
+    },
+    {
+        "character_id": 5,
+        "name": "Yola Yoghurt",
+        "store_section": "Dairy",
+        "_3d_model_path": "models/characters/yola_yoghurt.glb",
+        "riddle_hint": "I'm cool and creamy, good for your tum. Find me with the milk, before I become glum!",
+        "product_information": "Yoghurt is a good source of calcium, protein, and probiotics which are beneficial for gut health.",
+        "food_waste_tip": "If your yoghurt is close to its expiry date, freeze it in ice cube trays for smoothies or make frozen yoghurt bites.",
+        "nfc_tag_id": "AH_COLLECT_NFC_005"
+    }
+]
