@@ -1,0 +1,28 @@
+{
+    "collectibles": [
+      {
+        "id": "baguette_01",
+        "name": "Stokbrood Harrie",
+        "storeSection": "bakkerij",
+        "modelPath": "/assets/models/baguette.glb",
+        "riddle": "Ik ben lang en knapperig, een Frans genot, perfect met kaas, 's ochtends, 's middags of 's avonds.",
+        "productInfo": "Ons versgebakken stokbrood is een favoriet van de klant. Geniet ervan binnen 2 dagen voor de beste smaak.",
+        "foodWasteTip": "Oud stokbrood kan worden omgetoverd tot heerlijke croutons of paneermeel. Laat het niet verspillen!",
+        "nfcTagId": "SHB1",
+        "isCollected": false
+      },
+      {
+        "id": "tomato_02",
+        "name": "Tommie Tomaat",
+        "storeSection": "groente",
+        "modelPath": "/assets/models/tomato.glb",
+        "riddle": "Ik ben rond en rood, sappig en helder, in salades en sauzen, ik ben altijd een genot.",
+        "productInfo": "Onze trostomaten zitten boordevol smaak. Bewaar ze op kamertemperatuur voor een optimale smaak.",
+        "foodWasteTip": "Overrijpe tomaten kunnen worden gebruikt om een smaakvolle pastasaus of soep te maken.",
+        "nfcTagId": "TTG1",
+        "isCollected": true
+      }
+    ],
+    "collectedCharacters": ["tomato_02"]
+  }
+  
