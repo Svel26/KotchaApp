@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -11,7 +11,21 @@ const models = [
   { name: 'Bakery', file: 'bakery.gltf', type: 'gltf', path: '/src/assets/bakery.gltf' },
 ];
 
-const cameraCoords = ref({ x: 0, y: 0, z: 0 });
+// List of available objects to add (add more as needed)
+const availableObjects = [
+  { name: 'Dog', file: 'dog.glb', path: '/src/assets/dog.glb' },
+  { name: 'Bakery', file: 'bakery.gltf', path: '/src/assets/bakery.gltf' },
+  { name: 'Bakery (glb)', file: 'Bakerij.glb', path: '/src/assets/Bakerij.glb' },
+  // Add more objects here as needed
+];
+const selectedAddObject = ref(availableObjects[0].file);
+
+// For object manipulation
+const objectList = reactive([]);
+const selectedObjectIndex = ref(-1);
+const objectCoords = ref({ x: 0, y: 0, z: 0, rotY: 0 });
+
+const cameraCoords = ref({ x: 0, y: 0, z: 0, rotY: 0 });
 
 let scene, camera, renderer, controls;
 let currentModel = null;
@@ -58,6 +72,65 @@ function onSwitchModel() {
   if (model) loadModel(model);
 }
 
+// Add a new object (glb/gltf) to the scene and select it
+function addObject() {
+  const objMeta = availableObjects.find(o => o.file === selectedAddObject.value);
+  if (!objMeta) return;
+  const loader = new GLTFLoader();
+  loader.load(
+    objMeta.path,
+    (gltf) => {
+      const object = gltf.scene;
+      object.position.set(0, 0, 0);
+      object.scale.set(1, 1, 1);
+      scene.add(object);
+      objectList.push(object);
+      selectedObjectIndex.value = objectList.length - 1;
+      updateObjectCoords();
+    },
+    undefined,
+    (error) => {
+      alert('Failed to load object.');
+    }
+  );
+}
+
+// Move or rotate the selected object
+function moveSelectedObject(dx = 0, dy = 0, dz = 0) {
+  const obj = objectList[selectedObjectIndex.value];
+  if (obj) {
+    obj.position.x += dx;
+    obj.position.y += dy;
+    obj.position.z += dz;
+    updateObjectCoords();
+  }
+}
+function rotateSelectedObject(dRotY = 0) {
+  const obj = objectList[selectedObjectIndex.value];
+  if (obj) {
+    obj.rotation.y += dRotY;
+    updateObjectCoords();
+  }
+}
+function updateObjectCoords() {
+  const obj = objectList[selectedObjectIndex.value];
+  if (obj) {
+    objectCoords.value = {
+      x: obj.position.x.toFixed(2),
+      y: obj.position.y.toFixed(2),
+      z: obj.position.z.toFixed(2),
+      rotY: obj.rotation.y.toFixed(2),
+    };
+  } else {
+    objectCoords.value = { x: 0, y: 0, z: 0, rotY: 0 };
+  }
+}
+
+function selectObject(idx) {
+  selectedObjectIndex.value = idx;
+  updateObjectCoords();
+}
+
 onMounted(() => {
   const canvas = canvasRef.value;
   scene = new THREE.Scene();
@@ -66,7 +139,7 @@ onMounted(() => {
   camera = new THREE.PerspectiveCamera(75, 375 / 667, 0.1, 1000);
   camera.position.set(0, 2, 5);
 
-  renderer = new THREE.WebGLRenderer({ canvas });
+  renderer = new THREE.WebGLRenderer({ canvas: canvasRef.value });
   renderer.setSize(375, 667);
   renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -102,6 +175,15 @@ onMounted(() => {
       case 'KeyD': move.right = true; break;
       case 'Space': move.up = true; break;
       case 'ShiftLeft': move.down = true; break;
+      // Object manipulation (JIKL and Q/E)
+      case 'KeyI': moveSelectedObject(0, 0, -0.1); break; // forward
+      case 'KeyK': moveSelectedObject(0, 0, 0.1); break;  // backward
+      case 'KeyJ': moveSelectedObject(-0.1, 0, 0); break; // left
+      case 'KeyL': moveSelectedObject(0.1, 0, 0); break;  // right
+      case 'PageUp': moveSelectedObject(0, 0.1, 0); break;
+      case 'PageDown': moveSelectedObject(0, -0.1, 0); break;
+      case 'KeyQ': rotateSelectedObject(-0.1); break;
+      case 'KeyE': rotateSelectedObject(0.1); break;
     }
   };
   const onKeyUp = (event) => {
@@ -169,13 +251,32 @@ onMounted(() => {
         <option v-for="model in models" :key="model.file" :value="model.file">{{ model.name }}</option>
       </select>
       <button @click="onSwitchModel">Switch Model</button>
+      <select v-model="selectedAddObject" style="margin-left: 8px;">
+        <option v-for="obj in availableObjects" :key="obj.file" :value="obj.file">{{ obj.name }}</option>
+      </select>
+      <button @click="addObject" style="margin-left: 8px;">Add Object</button>
     </div>
     <div style="position: absolute; top: 110px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 14px;">
       Camera: X: {{ cameraCoords.x }}<br>
       Y: {{ cameraCoords.y }}<br>
       Z: {{ cameraCoords.z }} <br>
       RotY: {{ cameraCoords.rotY }}<br>
-
+    </div>
+    <div v-if="objectList.length" style="position: absolute; top: 200px; left: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 14px;">
+      <div>
+        <span>Objects:</span>
+        <span v-for="(obj, idx) in objectList" :key="idx" style="margin-right: 6px;">
+          <button @click="selectObject(idx)" :style="{fontWeight: selectedObjectIndex === idx ? 'bold' : 'normal'}">#{{ idx + 1 }}</button>
+        </span>
+      </div>
+      <div v-if="selectedObjectIndex >= 0">
+        <div>Selected Object: #{{ selectedObjectIndex + 1 }}</div>
+        <div>X: {{ objectCoords.x }}<br>Y: {{ objectCoords.y }}<br>Z: {{ objectCoords.z }}<br>RotY: {{ objectCoords.rotY }}</div>
+        <div style="margin-top: 6px;">
+          <span>Move: J (left), L (right), I (forward), K (backward), PgUp/PgDn (Y)</span><br>
+          <span>Rotate Y: Q/E</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>

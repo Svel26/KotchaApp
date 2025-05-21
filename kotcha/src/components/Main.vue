@@ -8,9 +8,9 @@ const canvasRef = ref(null);
 const cameraPositions = [
   { x: -3.94, y: 1.10, z: 4.19, rotY: -0.34 },
   { x: 0.99, y: 0.60, z: 4.89, rotY: 0.09 },
-  { x: 0, y: 5, z: 0, rotY: 0 },
-  { x: -5, y: 2, z: 0, rotY: 0 },
-  { x: 0, y: 2, z: -5, rotY: 0 },
+  { x: 3.10, y: 1, z: 4.14, rotY: 0.47 },
+  { x: 3.71, y: 1, z: 1.50, rotY: 0.67 },
+  { x: 1.06, y: 1.60, z: 0.78, rotY: -0.24 },
 ];
 const currentIndex = ref(0);
 
