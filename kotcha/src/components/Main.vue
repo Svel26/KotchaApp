@@ -56,18 +56,18 @@ onMounted(() => {
   // Add bakery.gltf model
   const loader = new GLTFLoader();
   loader.load(
-    '/src/assets/bakery.gltf',
-    (gltf) => {
-      const object = gltf.scene;
-      object.position.set(0, 0, 0);
-      object.scale.set(1, 1, 1);
-      scene.add(object);
-    },
-    undefined,
-    (error) => {
-      console.error('Error loading bakery.gltf:', error);
-      alert('Failed to load bakery.gltf.');
-    }
+      '/src/assets/bakery.gltf',
+      (gltf) => {
+        const object = gltf.scene;
+        object.position.set(0, 0, 0);
+        object.scale.set(1, 1, 1);
+        scene.add(object);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading bakery.gltf:', error);
+        alert('Failed to load bakery.gltf.');
+      }
   );
 
   // Set initial camera position and rotation
@@ -105,16 +105,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasRef" style="width: 375px; height: 667px;"></canvas>
-  <div style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
-    <button @click="prevPosition" :disabled="currentIndex === 0">Back</button>
-    <button @click="nextPosition" :disabled="currentIndex === cameraPositions.length - 1">Next</button>
+  <div class="container-fluid p-0 position-relative">
+    <div class="logo"/>
+    <canvas ref="canvasRef" style="width: 375px; height: 667px;"></canvas>
+    <div style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
+      <button @click="prevPosition" :disabled="currentIndex === 0">Back</button>
+      <button @click="nextPosition" :disabled="currentIndex === cameraPositions.length - 1">Next</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
 canvas {
   display: block;
+}
+
+.logo { position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  width: 60px;
+  height: 60px;
+  background-image: url('https://cdn.brandfetch.io/id74e2GHv4/theme/dark/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10;
 }
 
 button {
