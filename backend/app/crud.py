@@ -15,7 +15,7 @@ def create_collectible(db: Session, collectible: schemas.CollectibleCreate):
         character_id=collectible.character_id,
         name=collectible.name,
         store_section=collectible.store_section,
-        model_3d_path=collectible.model_3d_path, # CHANGED HERE
+        model_3d_path=collectible.model_3d_path,
         riddle_hint=collectible.riddle_hint,
         product_information=collectible.product_information,
         food_waste_tip=collectible.food_waste_tip,
@@ -39,12 +39,8 @@ def populate_db_from_json(db: Session, json_file_path: str):
     with open(json_file_path, 'r') as f:
         data = json.load(f)
         for item_data in data:
-            # This print can be helpful for debugging if issues persist:
-            # print(f"DEBUG: Processing item_data: {item_data}")
             collectible_schema = schemas.CollectibleCreate(**item_data)
-            # This print can also be helpful:
-            # print(f"DEBUG: Parsed Pydantic object: {collectible_schema.model_dump()}")
-            
+
             exists_by_id = db.query(models.Collectible).filter(models.Collectible.character_id == collectible_schema.character_id).first()
             exists_by_nfc = db.query(models.Collectible).filter(models.Collectible.nfc_tag_id == collectible_schema.nfc_tag_id).first()
             if not exists_by_id and not exists_by_nfc:
