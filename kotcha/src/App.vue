@@ -4,8 +4,8 @@ import Debug from './components/debug.vue';
 </script>
 
 <template>
-  <Main />
-  <Debug />
+  <Main/>
+  <Debug/>
 </template>
 
 <style></style>

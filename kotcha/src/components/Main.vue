@@ -1,27 +1,27 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 
 const canvasRef = ref(null);
 
 const cameraPositions = [
-  { x: -3.94, y: 1.10, z: 4.19, rotY: -0.34 },
-  { x: 0.99, y: 0.60, z: 4.89, rotY: 0.09 },
-  { x: 3.10, y: 1, z: 4.14, rotY: 0.47 },
-  { x: 3.71, y: 1, z: 1.50, rotY: 0.67 },
-  { x: 1.06, y: 1.60, z: 0.78, rotY: -0.24 },
+  {x: -3.94, y: 1.10, z: 4.19, rotY: -0.34},
+  {x: 0.99, y: 0.60, z: 4.89, rotY: 0.09},
+  {x: 3.10, y: 1, z: 4.14, rotY: 0.47},
+  {x: 3.71, y: 1, z: 1.50, rotY: 0.67},
+  {x: 1.06, y: 1.60, z: 0.78, rotY: -0.24},
 ];
 const currentIndex = ref(0);
 
 let camera, scene, renderer;
-let targetPosition = { ...cameraPositions[0] };
+let targetPosition = {...cameraPositions[0]};
 let targetRotY = cameraPositions[0].rotY ?? 0;
 
 const moveToIndex = (idx) => {
   if (idx >= 0 && idx < cameraPositions.length) {
     currentIndex.value = idx;
-    targetPosition = { ...cameraPositions[idx] };
+    targetPosition = {...cameraPositions[idx]};
     targetRotY = cameraPositions[idx].rotY ?? 0;
   }
 };
@@ -43,7 +43,7 @@ onMounted(() => {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, 375 / 667, 0.1, 1000);
-  renderer = new THREE.WebGLRenderer({ canvas });
+  renderer = new THREE.WebGLRenderer({canvas});
 
   renderer.setSize(375, 667);
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -117,7 +117,8 @@ onMounted(() => {
 
     <canvas ref="canvasRef" style="width: 375px; height: 667px;"></canvas>
 
-    <div style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
+    <div
+        style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
       <button @click="prevPosition" :disabled="currentIndex === 0">Back</button>
       <button @click="nextPosition" :disabled="currentIndex === cameraPositions.length - 1">Next</button>
     </div>
@@ -129,7 +130,8 @@ canvas {
   display: block;
 }
 
-.logo { position: absolute;
+.logo {
+  position: absolute;
   top: 1.5rem;
   left: 1.5rem;
   width: 60px;
