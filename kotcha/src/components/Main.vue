@@ -106,8 +106,17 @@ onMounted(() => {
 
 <template>
   <div class="container-fluid p-0 position-relative">
+
     <div class="logo"/>
+
+    <div class="position-absolute start-50 translate-middle text-light" style="top: 8%">
+      <div class="col-12">
+        <p class="m-0">hello world</p>
+      </div>
+    </div>
+
     <canvas ref="canvasRef" style="width: 375px; height: 667px;"></canvas>
+
     <div style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
       <button @click="prevPosition" :disabled="currentIndex === 0">Back</button>
       <button @click="nextPosition" :disabled="currentIndex === cameraPositions.length - 1">Next</button>
