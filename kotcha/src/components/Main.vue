@@ -6,11 +6,11 @@ import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 const canvasRef = ref(null);
 
 const cameraPositions = [
-  {x: -3.94, y: 1.10, z: 4.19, rotY: -0.34},
-  {x: 0.99, y: 0.60, z: 4.89, rotY: 0.09},
-  {x: 3.10, y: 1, z: 4.14, rotY: 0.47},
+  {x: -0.14, y: 1.00, z: 1.89, rotY: 1.6},
+  {x: -0.52, y: 1.30, z: 4.61, rotY: -0.67},
+  {x: 3.19, y: 1.30, z: 4.26, rotY: 0.54},
   {x: 3.71, y: 1, z: 1.50, rotY: 0.67},
-  {x: 1.06, y: 1.60, z: 0.78, rotY: -0.24},
+  {x: -3.11, y: 1.60, z: 2.34, rotY: -0.42},
 ];
 const currentIndex = ref(0);
 
