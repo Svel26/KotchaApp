@@ -8,7 +8,7 @@ const canvasRef = ref(null);
 const selectedModel = ref('Bakerij.glb');
 const models = [
   {name: 'Bakery (glb)', file: 'Bakerij.glb', type: 'glb', path: '/src/assets/Bakerij.glb'},
-  {name: 'Bakery', file: 'bakery.gltf', type: 'gltf', path: '/src/assets/bakery.gltf'},
+  {name: 'Bakery', file: 'bakery.gltf', type: 'gltf', path: '/src/assets/bakery_3.gltf'},
 ];
 
 // List of available objects to add (add more as needed)
