@@ -50,6 +50,14 @@ onMounted(() => {
     console.warn('Audio playback failed:', e);
   });
 
+  // Play click sound on any click in the app
+  const playClick = () => {
+    const clickAudio = new Audio('/src/sounds/click.wav');
+    clickAudio.volume = 0.7;
+    clickAudio.play();
+  };
+  window.addEventListener('click', playClick);
+
   const canvas = canvasRef.value;
 
   scene = new THREE.Scene();
