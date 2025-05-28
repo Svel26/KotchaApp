@@ -58,7 +58,7 @@ onMounted(() => {
   // Add bakery.gltf model
   const loader = new GLTFLoader();
   loader.load(
-      '/src/assets/bakery.gltf',
+      '/src/assets/bakery_2.gltf',
       (gltf) => {
         const object = gltf.scene;
         object.position.set(0, 0, 0);
