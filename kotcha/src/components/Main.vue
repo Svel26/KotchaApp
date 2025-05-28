@@ -14,6 +14,8 @@ const cameraPositions = [
 ];
 const currentIndex = ref(0);
 
+const textDisplay = ["broodjes", "bagels", "stokbrood", "vers uit de oven"];
+
 let camera, scene, renderer;
 let targetPosition = {...cameraPositions[0]};
 let targetRotY = cameraPositions[0].rotY ?? 0;
@@ -111,7 +113,7 @@ onMounted(() => {
 
     <div class="position-absolute start-50 translate-middle text-light" style="top: 8%">
       <div class="col-12">
-        <p class="m-0">hello world</p>
+        <p class="m-0">{{ textDisplay[currentIndex] }}</p>
       </div>
     </div>
 
