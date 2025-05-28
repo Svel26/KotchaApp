@@ -41,6 +41,15 @@ const prevPosition = () => {
 };
 
 onMounted(() => {
+  // Play and loop background audio
+  const audio = new Audio('/src/sounds/theme.wav');
+  audio.loop = true;
+  audio.volume = 0.5; // Optional: set volume
+  audio.play().catch(e => {
+    // Some browsers require user interaction before playing audio
+    console.warn('Audio playback failed:', e);
+  });
+
   const canvas = canvasRef.value;
 
   scene = new THREE.Scene();
