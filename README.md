@@ -1,4 +1,4 @@
-# Project Physical Computing lol
+# Project Physical Computing
 
 > This is a project in which game and web developers work together.
 
