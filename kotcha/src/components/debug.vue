@@ -7,15 +7,13 @@ import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 const canvasRef = ref(null);
 const selectedModel = ref('Bakerij.glb');
 const models = [
-  {name: 'Bakery (glb)', file: 'Bakerij.glb', type: 'glb', path: '/src/assets/Bakerij.glb'},
   {name: 'Bakery', file: 'bakery.gltf', type: 'gltf', path: '/src/assets/bakery_3.gltf'},
 ];
 
 // List of available objects to add (add more as needed)
 const availableObjects = [
   {name: 'Dog', file: 'dog.glb', path: '/src/assets/dog.glb'},
-  {name: 'Bakery', file: 'bakery.gltf', path: '/src/assets/bakery.gltf'},
-  {name: 'Bakery (glb)', file: 'Bakerij.glb', path: '/src/assets/Bakerij.glb'},
+  {name: 'Bakery', file: 'bakery.gltf', path: '/src/assets/bakery_3.gltf'},
   // Add more objects here as needed
 ];
 const selectedAddObject = ref(availableObjects[0].file);
