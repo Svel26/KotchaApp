@@ -89,6 +89,47 @@ onMounted(() => {
       }
   );
 
+  // Add dog.glb model
+  loader.load(
+      '/src/assets/donut.glb',
+      (gltf) => {
+        const object = gltf.scene;
+        scene.add(object);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading dog.glb:', error);
+      }
+  );
+
+  // Add donut.glb model
+  loader.load(
+      '/src/assets/donut.glb',
+      (gltf) => {
+        const object = gltf.scene;
+        scene.add(object);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading donut.glb:', error);
+      }
+  );
+
+  // Add stokbrood.glb model
+  loader.load(
+      '/src/assets/stokbrood.glb',
+      (gltf) => {
+        const object = gltf.scene;
+        object.position.set(0, 0.2, -2); // Adjust position as needed
+        object.scale.set(0.8, 0.8, 0.8); // Adjust scale as needed
+        scene.add(object);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading stokbrood.glb:', error);
+      }
+  );
+
   // Set initial camera position and rotation
   camera.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
   camera.rotation.y = targetRotY;
