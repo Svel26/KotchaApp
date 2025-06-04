@@ -262,14 +262,15 @@ button {
   background: #fff;
   color: #222;
   padding: 40px 36px 32px 36px;
+  margin: 1rem;
   border-radius: 18px;
   min-width: 320px;
-  max-width: 90vw;
+  max-width: 375px;
   min-height: 120px;
-  max-height: 70vh;
+  max-height: 100%;
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
   text-align: center;
-  font-size: 1.25rem;
+  font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.6;
