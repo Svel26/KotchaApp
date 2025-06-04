@@ -14,6 +14,9 @@ const models = [
 const availableObjects = [
   {name: 'Dog', file: 'dog.glb', path: '/src/assets/dog.glb'},
   {name: 'Bakery', file: 'bakery.gltf', path: '/src/assets/bakery_3.gltf'},
+  {name: 'Donut', file: 'donut.gltf', path: '/src/assets/donut.glb'},
+  {name: 'Stokbrood', file: 'stokbrood.gltf', path: '/src/assets/stokbrood.glb'},
+
   // Add more objects here as needed
 ];
 const selectedAddObject = ref(availableObjects[0].file);
