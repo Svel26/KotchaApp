@@ -1,7 +1,7 @@
 <script setup>
-import {onMounted, ref} from 'vue';
+import { ref, onMounted } from 'vue';
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 const canvasRef = ref(null);
 
@@ -13,12 +13,19 @@ const cameraPositions = [
   {x: -3.11, y: 1.60, z: 2.34, rotY: -0.42},
 ];
 const currentIndex = ref(0);
+const textDisplay = ["Broodjes", "Donuts", "Donuts", "Vers uit de oven", "Stokbrood"];
 
-const textDisplay = ["broodjes", "bagels", "stokbrood", "vers uit de oven"];
+// Popup state
+const showPopup = ref(false);
+const popupText = ref("");
 
 let camera, scene, renderer;
-let targetPosition = {...cameraPositions[0]};
+let targetPosition = { ...cameraPositions[0] };
 let targetRotY = cameraPositions[0].rotY ?? 0;
+
+// Store references to loaded models
+let stokbroodMesh = null;
+let donutMesh = null;
 
 const moveToIndex = (idx) => {
   if (idx >= 0 && idx < cameraPositions.length) {
@@ -68,8 +75,7 @@ onMounted(() => {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, 375 / 667, 0.1, 1000);
-  renderer = new THREE.WebGLRenderer({canvas});
-
+  renderer = new THREE.WebGLRenderer({ canvas });
   renderer.setSize(375, 667);
   renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -81,44 +87,46 @@ onMounted(() => {
   // Add bakery.gltf model
   const loader = new GLTFLoader();
   loader.load(
-      '/src/assets/bakery_3.gltf',
-      (gltf) => {
-        const object = gltf.scene;
-        object.position.set(0, 0, 0);
-        object.scale.set(1, 1, 1);
-        scene.add(object);
-      },
-      undefined,
-      (error) => {
-        console.error('Error loading bakery.gltf:', error);
-        alert('Failed to load bakery.gltf.');
-      }
+    '/src/assets/bakery_3.gltf',
+    (gltf) => {
+      const object = gltf.scene;
+      object.position.set(0, 0, 0);
+      object.scale.set(1, 1, 1);
+      scene.add(object);
+    },
+    undefined,
+    (error) => {
+      console.error('Error loading bakery.gltf:', error);
+      alert('Failed to load bakery.gltf.');
+    }
   );
 
   // Add donut.glb model
   loader.load(
-      '/src/assets/donut.glb',
-      (gltf) => {
-        const object = gltf.scene;
-        scene.add(object);
-      },
-      undefined,
-      (error) => {
-        console.error('Error loading donut.glb:', error);
-      }
+    '/src/assets/donut.glb',
+    (gltf) => {
+      const object = gltf.scene;
+      donutMesh = object;
+      scene.add(object);
+    },
+    undefined,
+    (error) => {
+      console.error('Error loading donut.glb:', error);
+    }
   );
 
   // Add stokbrood.glb model
   loader.load(
-      '/src/assets/stokbrood.glb',
-      (gltf) => {
-        const object = gltf.scene;
-        scene.add(object);
-      },
-      undefined,
-      (error) => {
-        console.error('Error loading stokbrood.glb:', error);
-      }
+    '/src/assets/stokbrood.glb',
+    (gltf) => {
+      const object = gltf.scene;
+      stokbroodMesh = object;
+      scene.add(object);
+    },
+    undefined,
+    (error) => {
+      console.error('Error loading stokbrood.glb:', error);
+    }
   );
 
   // Set initial camera position and rotation
@@ -152,6 +160,38 @@ onMounted(() => {
     renderer.setSize(375, 667);
     renderer.setPixelRatio(window.devicePixelRatio);
   });
+
+  // Raycaster for click detection
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  function onCanvasClick(event) {
+    // Get canvas bounds
+    const rect = canvas.getBoundingClientRect();
+    // Convert mouse position to normalized device coordinates (-1 to +1)
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    // Check intersection with donut and stokbrood
+    const clickableMeshes = [];
+    if (donutMesh) clickableMeshes.push(donutMesh);
+    if (stokbroodMesh) clickableMeshes.push(stokbroodMesh);
+    let found = false;
+    clickableMeshes.forEach(mesh => {
+      // If the mesh is a group, check its children
+      const intersects = raycaster.intersectObject(mesh, true);
+      if (intersects.length > 0 && !found) {
+        found = true;
+        if (mesh === donutMesh) {
+          popupText.value = 'Altijd in de stemming voor een crunch? Dit Franse icoon is knapperig van buiten, zacht van binnen en perfect om te dippen, beleggen of gewoon stiekem zo op te eten. Wist je dat ‘baguette’ in het Frans gewoon ‘stok’ betekent? Bijt erin en voel je even in een Parijse bistro... of gewoon bij Appie op de hoek.';
+        } else if (mesh === stokbroodMesh) {
+          popupText.value = 'Een donut met een geheim! Van buiten lekker fluffy, van binnen gevuld met romige custard én een knapperig suikerlaagje on top, net als z’n chique Franse broer. Een toetje en een snack in één. Tip: breek de bovenkant met je lepel voor de ultieme crack! (Of gewoon met je tanden, we zeggen niks.)';
+        }
+        showPopup.value = true;
+      }
+    });
+  }
+  canvas.addEventListener('click', onCanvasClick);
 });
 </script>
 
@@ -172,6 +212,13 @@ onMounted(() => {
         style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
       <button @click="prevPosition">Back</button>
       <button @click="nextPosition">Next</button>
+    </div>
+
+    <div v-if="showPopup" class="popup-overlay" @click="showPopup = false">
+      <div class="popup-content">
+        <span>{{ popupText }}</span>
+        <button @click.stop="showPopup = false" style="margin-top: 12px;">Sluiten</button>
+      </div>
     </div>
   </div>
 </template>
@@ -198,5 +245,61 @@ button {
   padding: 10px 18px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+.popup-content {
+  position: relative;
+  background: #fff;
+  color: #222;
+  padding: 40px 36px 32px 36px;
+  border-radius: 18px;
+  min-width: 320px;
+  max-width: 90vw;
+  min-height: 120px;
+  max-height: 70vh;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  word-break: break-word;
+}
+.popup-content button {
+  margin-top: 24px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #222233;
+  color: #fff;
+  cursor: pointer;
+  /* transition: background 0.2s; */
+}
+.popup-content button:hover {
+  background: #444466;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
 }
 </style>
