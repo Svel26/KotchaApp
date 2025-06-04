@@ -29,14 +29,20 @@ const moveToIndex = (idx) => {
 };
 
 const nextPosition = () => {
+  // Always allow next, wrap to first if at end
   if (currentIndex.value < cameraPositions.length - 1) {
     moveToIndex(currentIndex.value + 1);
+  } else {
+    moveToIndex(0); // wrap to first
   }
 };
 
 const prevPosition = () => {
+  // Always allow back, wrap to last if at start
   if (currentIndex.value > 0) {
     moveToIndex(currentIndex.value - 1);
+  } else {
+    moveToIndex(cameraPositions.length - 1); // wrap to last
   }
 };
 
@@ -164,8 +170,8 @@ onMounted(() => {
 
     <div
         style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
-      <button @click="prevPosition" :disabled="currentIndex === 0">Back</button>
-      <button @click="nextPosition" :disabled="currentIndex === cameraPositions.length - 1">Next</button>
+      <button @click="prevPosition">Back</button>
+      <button @click="nextPosition">Next</button>
     </div>
   </div>
 </template>
