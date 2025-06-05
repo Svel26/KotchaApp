@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -18,6 +18,7 @@ const textDisplay = ["Broodjes", "Donuts", "Donuts", "Vers uit de oven", "Stokbr
 // Popup state
 const showPopup = ref(false);
 const popupText = ref("");
+const popupFadeOut = ref(false);
 
 let camera, scene, renderer;
 let targetPosition = { ...cameraPositions[0] };
@@ -52,6 +53,14 @@ const prevPosition = () => {
     moveToIndex(cameraPositions.length - 1); // wrap to last
   }
 };
+
+function closePopup() {
+  popupFadeOut.value = true;
+  setTimeout(() => {
+    showPopup.value = false;
+    popupFadeOut.value = false;
+  }, 400); // match fade-out duration
+}
 
 onMounted(() => {
   // Play and loop background audio
@@ -202,7 +211,7 @@ onMounted(() => {
 
     <div class="position-absolute start-50 translate-middle text-light" style="top: 8%">
       <div class="col-12">
-        <p class="m-0">{{ textDisplay[currentIndex] }}</p>
+        <p class="m-0 text-display-bordered">{{ textDisplay[currentIndex] }}</p>
       </div>
     </div>
 
@@ -214,10 +223,10 @@ onMounted(() => {
       <button @click="nextPosition">Next</button>
     </div>
 
-    <div v-if="showPopup" class="popup-overlay" @click="showPopup = false">
-      <div class="popup-content">
+    <div v-if="showPopup" class="popup-overlay" :class="{ 'fade-out': popupFadeOut }" @click="closePopup">
+      <div class="popup-content" :class="{ 'fade-out': popupFadeOut }">
         <span>{{ popupText }}</span>
-        <button @click.stop="showPopup = false" style="margin-top: 12px;">Sluiten</button>
+        <button @click.stop="closePopup" style="margin-top: 12px;">Sluiten</button>
       </div>
     </div>
   </div>
@@ -256,7 +265,16 @@ button {
   justify-content: center;
   z-index: 1000;
   backdrop-filter: blur(2px);
+  opacity: 0;
+  animation: fadeInOverlay 0.4s forwards;
+  transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1);
 }
+.popup-overlay.fade-out {
+  opacity: 0 !important;
+  pointer-events: none;
+  animation: none;
+}
+
 .popup-content {
   position: relative;
   background: #fff;
@@ -280,6 +298,16 @@ button {
   justify-content: center;
   overflow-y: auto;
   word-break: break-word;
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  animation: fadeInPopup 0.5s 0.1s cubic-bezier(0.4,0,0.2,1) forwards;
+  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.popup-content.fade-out {
+  opacity: 0 !important;
+  transform: translateY(30px) scale(0.98) !important;
+  animation: none;
+  pointer-events: none;
 }
 .popup-content button {
   margin-top: 24px;
@@ -302,5 +330,30 @@ button {
   right: 10px;
   cursor: pointer;
   font-size: 18px;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInPopup {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.text-display-bordered {
+  background: rgba(0,0,0,0.75);
+  border-radius: 12px;
+  padding: 8px 20px;
+  border: 2px solid #111;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  display: inline-block;
 }
 </style>
