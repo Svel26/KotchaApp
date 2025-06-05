@@ -192,9 +192,9 @@ onMounted(() => {
       if (intersects.length > 0 && !found) {
         found = true;
         if (mesh === donutMesh) {
-          popupText.value = 'Altijd in de stemming voor een crunch? Dit Franse icoon is knapperig van buiten, zacht van binnen en perfect om te dippen, beleggen of gewoon stiekem zo op te eten. Wist je dat ‘baguette’ in het Frans gewoon ‘stok’ betekent? Bijt erin en voel je even in een Parijse bistro... of gewoon bij Appie op de hoek.';
-        } else if (mesh === stokbroodMesh) {
           popupText.value = 'Een donut met een geheim! Van buiten lekker fluffy, van binnen gevuld met romige custard én een knapperig suikerlaagje on top, net als z’n chique Franse broer. Een toetje en een snack in één. Tip: breek de bovenkant met je lepel voor de ultieme crack! (Of gewoon met je tanden, we zeggen niks.)';
+        } else if (mesh === stokbroodMesh) {
+          popupText.value = 'Altijd in de stemming voor een crunch? Dit Franse icoon is knapperig van buiten, zacht van binnen en perfect om te dippen, beleggen of gewoon stiekem zo op te eten. Wist je dat ‘baguette’ in het Frans gewoon ‘stok’ betekent? Bijt erin en voel je even in een Parijse bistro... of gewoon bij Appie op de hoek.';
         }
         showPopup.value = true;
       }
