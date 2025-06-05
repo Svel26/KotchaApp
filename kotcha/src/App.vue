@@ -5,7 +5,6 @@ import Debug from './components/debug.vue';
 
 <template>
   <Main/>
-  <Debug/>
 </template>
 
 <style></style>
