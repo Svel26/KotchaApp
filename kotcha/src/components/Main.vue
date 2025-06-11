@@ -326,8 +326,10 @@ onMounted(() => {
         :src="videoSrc"
         @ended="onVideoEnded"
         autoplay
-        controls
         style="max-width: 90vw; max-height: 90vh; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); background: #000;"
+        controlslist="nodownload nofullscreen noremoteplayback noplaybackrate"
+        disablePictureInPicture
+        :controls="false"
       ></video>
     </div>
   </div>
