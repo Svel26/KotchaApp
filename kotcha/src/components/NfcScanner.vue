@@ -14,7 +14,7 @@
   <script setup>
   import { ref, onMounted, onUnmounted } from 'vue';
   
-  const emit = defineEmits(['close', 'scan-success']);
+  const emit = defineEmits(['close', 'scan-success', 'character-unlocked']);
   const statusMessage = ref('Ready to scan. Hold your phone near the collectible.');
   let ndef = null;
   
@@ -37,12 +37,44 @@
     }
   };
   
-  const handleReading = ({ serialNumber }) => {
-    statusMessage.value = `Success! Scanned: ${serialNumber}`;
-    emit('scan-success', serialNumber);
-    emit('close'); // Automatically close the scanner on success
+  const handleReading = async ({ serialNumber }) => {
+    statusMessage.value = `Attempting to unlock with NFC: ${serialNumber}...`;
+    try {
+      const response = await fetch('/api/unlock-character', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serialNumber }),
+      });
+
+      if (response.ok) {
+        const unlockedCollectible = await response.json();
+        statusMessage.value = `Successfully unlocked: ${unlockedCollectible.name}!`;
+        emit('character-unlocked', unlockedCollectible);
+        emit('scan-success', serialNumber); // Keeping this as per original logic
+        emit('close'); // Close scanner on successful unlock
+      } else {
+        let errorMessage = "Failed to unlock character.";
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.detail) {
+            errorMessage += ` Server said: ${errorData.detail}`;
+          }
+        } catch (e) {
+          // Could not parse error JSON, use generic message
+          console.error("Could not parse error response JSON:", e);
+        }
+        statusMessage.value = errorMessage;
+        console.error('API Error:', response.status, response.statusText);
+        // Do not emit 'close' here, let user see the error and manually close.
+      }
+    } catch (error) {
+      statusMessage.value = 'Network error or problem making the request.';
+      console.error('Fetch/Network Error:', error);
+      // Do not emit 'close' here, let user see the error and manually close.
+    }
   };
-  
   const handleReadingError = () => {
     statusMessage.value = 'Could not read the tag. Please try again.';
   };

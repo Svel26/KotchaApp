@@ -54,3 +54,17 @@ def get_collectible_by_nfc_id(db: Session, nfc_tag_id: str):
     Retrieves a single collectible from the database by its NFC tag ID.
     """
     return db.query(models.Collectible).filter(models.Collectible.nfc_tag_id == nfc_tag_id).first()
+
+def unlock_collectible_by_nfc_id(db: Session, nfc_tag_id: str):
+    """
+    Finds a collectible by nfc_tag_id, sets its is_unlocked attribute to True,
+    commits the changes to the database, and returns the updated collectible.
+    Returns None if the collectible is not found.
+    """
+    collectible = db.query(models.Collectible).filter(models.Collectible.nfc_tag_id == nfc_tag_id).first()
+    if collectible:
+        collectible.is_unlocked = True
+        db.commit()
+        db.refresh(collectible)
+        return collectible
+    return None

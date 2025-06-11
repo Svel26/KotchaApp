@@ -8,6 +8,7 @@ class CollectibleBase(BaseModel):
     product_information: str
     food_waste_tip: str
     nfc_tag_id: str
+    is_unlocked: bool = Field(default=False)
 
     model_config = {
         "from_attributes": True,
@@ -19,3 +20,6 @@ class CollectibleCreate(CollectibleBase):
 
 class CollectibleResponse(CollectibleBase):
     character_id: int
+
+class UnlockRequest(BaseModel):
+    serialNumber: str
