@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, Boolean
 from .database import Base
 
 class Collectible(Base):
@@ -12,3 +12,4 @@ class Collectible(Base):
     product_information = Column(Text)
     food_waste_tip = Column(Text)
     nfc_tag_id = Column(String, unique=True, index=True)
+    is_unlocked = Column(Boolean, default=False)

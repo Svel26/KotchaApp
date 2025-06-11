@@ -62,3 +62,10 @@ def read_collectible_by_nfc_id(nfc_tag_id: str, db: Session = Depends(get_db)):
     if db_collectible is None:
         raise HTTPException(status_code=404, detail="NFC Tag not found in database")
     return db_collectible
+
+@app.post("/api/unlock-character", response_model=schemas.CollectibleResponse)
+def unlock_character(unlock_request: schemas.UnlockRequest, db: Session = Depends(get_db)):
+    db_collectible = crud.unlock_collectible_by_nfc_id(db, nfc_tag_id=unlock_request.serialNumber)
+    if db_collectible is None:
+        raise HTTPException(status_code=404, detail="NFC Tag not found")
+    return db_collectible
