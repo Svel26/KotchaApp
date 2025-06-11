@@ -48,3 +48,9 @@ def populate_db_from_json(db: Session, json_file_path: str):
             else:
                 print(f"Skipping already existing collectible: ID {collectible_schema.character_id} / NFC {collectible_schema.nfc_tag_id}")
     print(f"Database population attempt from {json_file_path} complete.")
+
+def get_collectible_by_nfc_id(db: Session, nfc_tag_id: str):
+    """
+    Retrieves a single collectible from the database by its NFC tag ID.
+    """
+    return db.query(models.Collectible).filter(models.Collectible.nfc_tag_id == nfc_tag_id).first()

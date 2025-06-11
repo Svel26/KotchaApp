@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 import os
@@ -10,13 +11,35 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Albert Heijn Collectibles API")
 
+# --- Add this CORS middleware block ---
+# This allows your frontend to securely communicate with this backend.
+origins = [
+    # In a real production app, you'd be more restrictive.
+    # For local development, this is fine.
+    "*" 
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# -----------------------------------------
+
 @app.on_event("startup")
 def on_startup():
     db = SessionLocal()
     try:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        json_file_path = os.path.join(current_dir, "data", "collectibles_data.json")
-        crud.populate_db_from_json(db, json_file_path)
+        # This check prevents re-populating the DB every time you restart the server
+        if crud.get_collectibles(db, skip=0, limit=1) == []:
+            print("Database is empty, populating from JSON...")
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            json_file_path = os.path.join(current_dir, "data", "collectibles_data.json")
+            crud.populate_db_from_json(db, json_file_path)
+        else:
+            print("Database already contains data.")
     finally:
         db.close()
 
@@ -30,4 +53,12 @@ def read_collectible(character_id: int, db: Session = Depends(get_db)):
     db_collectible = crud.get_collectible(db, character_id=character_id)
     if db_collectible is None:
         raise HTTPException(status_code=404, detail="Collectible not found")
+    return db_collectible
+
+# --- Add this new endpoint ---
+@app.get("/collectibles/nfc/{nfc_tag_id}", response_model=schemas.CollectibleResponse)
+def read_collectible_by_nfc_id(nfc_tag_id: str, db: Session = Depends(get_db)):
+    db_collectible = crud.get_collectible_by_nfc_id(db, nfc_tag_id=nfc_tag_id)
+    if db_collectible is None:
+        raise HTTPException(status_code=404, detail="NFC Tag not found in database")
     return db_collectible
