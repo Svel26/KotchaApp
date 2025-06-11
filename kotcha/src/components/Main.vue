@@ -127,15 +127,28 @@ function onVideoEnded() {
   pendingModelSwap = null;
 }
 
+let backgroundAudio = null;
+
 onMounted(() => {
   // Play and loop background audio
-  const audio = new Audio('/src/sounds/theme.wav');
-  audio.loop = true;
-  audio.volume = 0.5; // Optional: set volume
-  audio.play().catch(e => {
-    // Some browsers require user interaction before playing audio
-    console.warn('Audio playback failed:', e);
-  });
+  if (!backgroundAudio) {
+    backgroundAudio = new Audio('/src/sounds/theme.wav');
+    backgroundAudio.loop = true;
+    backgroundAudio.volume = 0.5;
+    backgroundAudio.autoplay = true;
+    backgroundAudio.play().catch(e => {
+      // Some browsers require user interaction before playing audio
+      console.warn('Audio playback failed:', e);
+      // Try to resume on first user interaction
+      const resumeAudio = () => {
+        backgroundAudio.play().catch(() => {});
+        window.removeEventListener('click', resumeAudio);
+        window.removeEventListener('keydown', resumeAudio);
+      };
+      window.addEventListener('click', resumeAudio);
+      window.addEventListener('keydown', resumeAudio);
+    });
+  }
 
   // Play click sound on any click in the app
   const playClick = () => {
