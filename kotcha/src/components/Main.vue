@@ -20,6 +20,10 @@ const showPopup = ref(false);
 const popupText = ref("");
 const popupFadeOut = ref(false);
 
+// Video overlay state
+const showVideo = ref(false);
+const videoKey = ref(0); // To force reload video
+const videoSrc = ref(''); // Dynamic video source
 let camera, scene, renderer;
 let targetPosition = { ...cameraPositions[0] };
 let targetRotY = cameraPositions[0].rotY ?? 0;
@@ -60,6 +64,67 @@ function closePopup() {
     showPopup.value = false;
     popupFadeOut.value = false;
   }, 400); // match fade-out duration
+}
+
+let pendingModelSwap = null;
+
+function playVideoAndSwapModel(swapType) {
+  if (swapType === 'u') {
+    videoSrc.value = '/src/assets/donut.mp4';
+  } else if (swapType === 'p') {
+    videoSrc.value = '/src/assets/stokbrood.mp4';
+  }
+  showVideo.value = true;
+  videoKey.value++;
+  pendingModelSwap = swapType;
+}
+
+function onVideoEnded() {
+  showVideo.value = false;
+  if (pendingModelSwap === 'u') {
+    // Remove donut_black.glb if present
+    if (donutMesh) {
+      scene.remove(donutMesh);
+      donutMesh = null;
+    }
+    // Load donut.glb and assign to donutMesh
+    const loader = new GLTFLoader();
+    loader.load(
+      '/src/assets/donut.glb',
+      (gltf) => {
+        const object = gltf.scene;
+        object.name = 'donut';
+        donutMesh = object;
+        scene.add(object);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading donut.glb:', error);
+      }
+    );
+  } else if (pendingModelSwap === 'p') {
+    // Remove stokbrood_black.glb if present
+    if (stokbroodMesh) {
+      scene.remove(stokbroodMesh);
+      stokbroodMesh = null;
+    }
+    // Load stokbrood.glb and assign to stokbroodMesh
+    const loader = new GLTFLoader();
+    loader.load(
+      '/src/assets/stokbrood.glb',
+      (gltf) => {
+        const object = gltf.scene;
+        object.name = 'stokbrood';
+        stokbroodMesh = object;
+        scene.add(object);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading stokbrood.glb:', error);
+      }
+    );
+  }
+  pendingModelSwap = null;
 }
 
 onMounted(() => {
@@ -112,7 +177,7 @@ onMounted(() => {
 
   // Add donut.glb model
   loader.load(
-    '/src/assets/donut.glb',
+    '/src/assets/donut_black.glb',
     (gltf) => {
       const object = gltf.scene;
       donutMesh = object;
@@ -126,7 +191,7 @@ onMounted(() => {
 
   // Add stokbrood.glb model
   loader.load(
-    '/src/assets/stokbrood.glb',
+    '/src/assets/stokbrood_black.glb',
     (gltf) => {
       const object = gltf.scene;
       stokbroodMesh = object;
@@ -137,6 +202,19 @@ onMounted(() => {
       console.error('Error loading stokbrood.glb:', error);
     }
   );
+
+  // --- KEYBOARD SWAP LOGIC ---
+  window.addEventListener('keydown', (event) => {
+    if ((event.key === 'u' || event.key === 'U') && !showVideo.value) {
+      playVideoAndSwapModel('u');
+      return;
+    }
+    if ((event.key === 'p' || event.key === 'P') && !showVideo.value) {
+      playVideoAndSwapModel('p');
+      return;
+    }
+    // ...existing code for other keys if any...
+  });
 
   // Set initial camera position and rotation
   camera.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
@@ -228,6 +306,17 @@ onMounted(() => {
         <span>{{ popupText }}</span>
         <button @click.stop="closePopup" style="margin-top: 12px;">Sluiten</button>
       </div>
+    </div>
+
+    <div v-if="showVideo" class="video-overlay">
+      <video
+        :key="videoKey"
+        :src="videoSrc"
+        @ended="onVideoEnded"
+        autoplay
+        controls
+        style="max-width: 90vw; max-height: 90vh; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); background: #000;"
+      ></video>
     </div>
   </div>
 </template>
@@ -355,5 +444,25 @@ button {
   border: 2px solid #111;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
   display: inline-block;
+}
+
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.video-player {
+  max-width: 90%;
+  max-height: 90%;
+  border: 4px solid #fff;
+  border-radius: 12px;
 }
 </style>
