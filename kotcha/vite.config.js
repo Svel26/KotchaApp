@@ -10,15 +10,15 @@ export default defineConfig({
     host: '0.0.0.0', 
     port: 5173,
 
-    // Enable HTTPS with the certificates you generated
+    // Enable HTTPS using the certificates you generated with mkcert
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
       cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem')),
     },
 
-    // IMPORTANT: You will need to add your ngrok URL here later
+    // Allow ngrok to connect to the server
     allowedHosts: [
-      "https://9ca6-77-171-218-237.ngrok-free.app/"
+      '5956-77-171-218-237.ngrok-free.app'
     ],
   }
 })
