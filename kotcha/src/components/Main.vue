@@ -112,7 +112,7 @@ onMounted(() => {
 
   // Add donut.glb model
   loader.load(
-    '/src/assets/donut.glb',
+    '/src/assets/donut_black.glb',
     (gltf) => {
       const object = gltf.scene;
       donutMesh = object;
@@ -126,7 +126,7 @@ onMounted(() => {
 
   // Add stokbrood.glb model
   loader.load(
-    '/src/assets/stokbrood.glb',
+    '/src/assets/stokbrood_black.glb',
     (gltf) => {
       const object = gltf.scene;
       stokbroodMesh = object;
@@ -137,6 +137,48 @@ onMounted(() => {
       console.error('Error loading stokbrood.glb:', error);
     }
   );
+
+  // --- KEYBOARD SWAP LOGIC ---
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'u' || event.key === 'U') {
+      // Swap donut_black.glb with pizzarette.glb
+      if (donutMesh) {
+        scene.remove(donutMesh);
+        donutMesh = null;
+      }
+      loader.load(
+        '/src/assets/donut.glb',
+        (gltf) => {
+          const object = gltf.scene;
+          donutMesh = object;
+          scene.add(object);
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading donut.glb:', error);
+        }
+      );
+    }
+    if (event.key === 'p' || event.key === 'P') {
+      // Swap stokbrood_black.glb with Frikandelbroodje.glb
+      if (stokbroodMesh) {
+        scene.remove(stokbroodMesh);
+        stokbroodMesh = null;
+      }
+      loader.load(
+        '/src/assets/stokbrood.glb',
+        (gltf) => {
+          const object = gltf.scene;
+          stokbroodMesh = object;
+          scene.add(object);
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading stokbrood.glb:', error);
+        }
+      );
+    }
+  });
 
   // Set initial camera position and rotation
   camera.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
