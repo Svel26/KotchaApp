@@ -148,9 +148,14 @@ onMounted(() => {
   const canvas = canvasRef.value;
 
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, 375 / 667, 0.1, 1000);
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
   renderer = new THREE.WebGLRenderer({ canvas });
-  renderer.setSize(375, 667);
+  renderer.setSize(width, height);
+
   renderer.setPixelRatio(window.devicePixelRatio);
 
   // Add light
@@ -242,10 +247,11 @@ onMounted(() => {
   animate();
 
   window.addEventListener('resize', () => {
-    camera.aspect = 375 / 667;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(375, 667);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(width, height);
   });
 
   // Raycaster for click detection
@@ -293,10 +299,10 @@ onMounted(() => {
       </div>
     </div>
 
-    <canvas ref="canvasRef" style="width: 375px; height: 667px;"></canvas>
+    <canvas ref="canvasRef" style="width: 100vw; height: 100vh; display: block;"></canvas>
 
     <div
-        style="position: absolute; top: 50%; transform: translateY(-50%); width: 375px; display: flex; justify-content: space-between; padding: 0 0px;">
+        style="position: absolute; top: 50%; transform: translateY(-50%); width: 100vw; display: flex; justify-content: space-between; padding: 0 0px;">
       <button @click="prevPosition">Back</button>
       <button @click="nextPosition">Next</button>
     </div>
