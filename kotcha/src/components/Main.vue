@@ -307,6 +307,12 @@ onMounted(() => {
       <button @click="nextPosition">Next</button>
     </div>
 
+    <!-- Model/video swap buttons -->
+    <div style="position: absolute; bottom: 32px; right: 32px; display: flex; flex-direction: column; gap: 12px; z-index: 1200;">
+      <button @click="playVideoAndSwapModel('u')" class="swap-btn">Donut</button>
+      <button @click="playVideoAndSwapModel('p')" class="swap-btn">Stokbrood</button>
+    </div>
+
     <div v-if="showPopup" class="popup-overlay" :class="{ 'fade-out': popupFadeOut }" @click="closePopup">
       <div class="popup-content" :class="{ 'fade-out': popupFadeOut }">
         <span>{{ popupText }}</span>
@@ -470,5 +476,23 @@ button {
   max-height: 90%;
   border: 4px solid #fff;
   border-radius: 12px;
+}
+
+.swap-btn {
+  background: #fff;
+  color: #222233;
+  border: 2px solid #222233;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.swap-btn:hover {
+  background: #222233;
+  color: #fff;
+  border-color: #444466;
 }
 </style>
