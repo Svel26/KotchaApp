@@ -11,14 +11,6 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Albert Heijn Collectibles API")
 
-# --- Add this CORS middleware block ---
-# This allows your frontend to securely communicate with this backend.
-origins = [
-    # In a real production app, you'd be more restrictive.
-    # For local development, this is fine.
-    "*" 
-]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -55,7 +47,6 @@ def read_collectible(character_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Collectible not found")
     return db_collectible
 
-# --- Add this new endpoint ---
 @app.get("/collectibles/nfc/{nfc_tag_id}", response_model=schemas.CollectibleResponse)
 def read_collectible_by_nfc_id(nfc_tag_id: str, db: Session = Depends(get_db)):
     db_collectible = crud.get_collectible_by_nfc_id(db, nfc_tag_id=nfc_tag_id)
