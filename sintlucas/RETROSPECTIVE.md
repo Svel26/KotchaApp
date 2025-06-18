@@ -27,7 +27,7 @@ In this document you will write down some conclusions.
 * When I cope when things go wrong. I ask my other mates if they could help me out with something. The second option is searching on the internet for a solution.
 * The effect for the team was that we got closer to talk to eachother
 
-## Third Retrospective [4/05/2025]
+## Third Retrospective [4/06/2025]
 * We've talked about the final stuff. We know what to do next
 * Nothing really.
 * Cant think of anything. Maybe that people have to be in class on time. We've did the standup without 3 people.
